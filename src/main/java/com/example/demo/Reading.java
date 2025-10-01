@@ -11,7 +11,10 @@ public class Reading {
     private Long id;
 
     private String sensorId;
+    
+    @Column(name = "sensor_value")
     private Double value;
+    
     private LocalDateTime timestamp;
 
     // Getters e Setters
