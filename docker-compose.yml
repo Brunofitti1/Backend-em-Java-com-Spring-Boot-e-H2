@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: festo-postgres
+    environment:
+      POSTGRES_DB: festo_sensors
+      POSTGRES_USER: festo_user
+      POSTGRES_PASSWORD: festo_pass_2024
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - festo-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U festo_user -d festo_sensors"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: festo-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@festo.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - festo-network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  festo-network:
+    driver: bridge
