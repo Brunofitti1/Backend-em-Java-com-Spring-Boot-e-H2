@@ -64,10 +64,12 @@ public class SecurityConfig {
                         // .requestMatchers("/api/**").authenticated()
                         // TODO: Descomentar para produção
                         .anyRequest().permitAll()
-                )
-                .oauth2ResourceServer(oauth2 -> 
-                        oauth2.jwt(jwt -> log.info("JWT Resource Server configurado"))
                 );
+                // OAuth2 JWT desabilitado temporariamente para desenvolvimento sem Azure
+                // Descomente quando configurar o Azure AD
+                //.oauth2ResourceServer(oauth2 -> 
+                //        oauth2.jwt(jwt -> log.info("JWT Resource Server configurado"))
+                //);
 
         return http.build();
     }
