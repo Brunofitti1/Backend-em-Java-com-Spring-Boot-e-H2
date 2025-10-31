@@ -3,6 +3,7 @@
 ## Sprint 4 - Escalabilidade e Experiência Completa
 
 ### 👥 Integrantes
+
 - **Nome:** [SEU NOME COMPLETO]
 - **RM:** [SEU RM]
 - **Nome:** [NOME DO PARCEIRO]
@@ -48,17 +49,17 @@ src/main/java/com/example/demo/
 
 ## 🛠️ Tecnologias Utilizadas
 
-| Tecnologia | Versão | Descrição |
-|-----------|--------|-----------|
-| Java | 17 | Linguagem de programação |
-| Spring Boot | 3.5.0 | Framework principal |
-| Spring Security | 3.5.0 | Autenticação e autorização |
-| Spring Data JPA | 3.5.0 | Persistência de dados |
-| PostgreSQL | 16 | Banco de dados relacional |
-| Lombok | Latest | Redução de boilerplate |
-| MapStruct | 1.5.5 | Mapeamento de objetos |
-| SpringDoc OpenAPI | 2.3.0 | Documentação Swagger |
-| Docker Compose | 3.8 | Orquestração de containers |
+| Tecnologia        | Versão | Descrição                  |
+| ----------------- | ------ | -------------------------- |
+| Java              | 17     | Linguagem de programação   |
+| Spring Boot       | 3.5.0  | Framework principal        |
+| Spring Security   | 3.5.0  | Autenticação e autorização |
+| Spring Data JPA   | 3.5.0  | Persistência de dados      |
+| PostgreSQL        | 16     | Banco de dados relacional  |
+| Lombok            | Latest | Redução de boilerplate     |
+| MapStruct         | 1.5.5  | Mapeamento de objetos      |
+| SpringDoc OpenAPI | 2.3.0  | Documentação Swagger       |
+| Docker Compose    | 3.8    | Orquestração de containers |
 
 ---
 
@@ -89,6 +90,7 @@ nano .env
 ```
 
 Preencha com as credenciais do **Azure AD**:
+
 ```properties
 AZURE_TENANT_ID=seu-tenant-id
 AZURE_CLIENT_ID=seu-client-id
@@ -105,6 +107,7 @@ docker-compose ps
 ```
 
 **Acessos:**
+
 - **PostgreSQL**: `localhost:5432`
 - **PgAdmin**: `http://localhost:5050`
   - Email: `admin@festo.com`
@@ -138,7 +141,9 @@ mvn spring-boot:run
 ```http
 GET /api/sensores
 ```
+
 **Resposta:**
+
 ```json
 [
   {
@@ -155,21 +160,25 @@ GET /api/sensores
 #### 📊 Leituras
 
 ##### Listar Todas
+
 ```http
 GET /api/readings
 ```
 
 ##### Buscar por Sensor
+
 ```http
 GET /api/readings/{sensorId}
 ```
 
 ##### Buscar por ID
+
 ```http
 GET /api/readings/id/{id}
 ```
 
 ##### Criar Nova Leitura
+
 ```http
 POST /api/readings
 Content-Type: application/json
@@ -182,25 +191,27 @@ Content-Type: application/json
 ```
 
 ##### Gerar Dados de Teste
+
 ```http
 POST /api/readings/generate?count=10
 ```
 
 ##### Deletar Leitura
+
 ```http
 DELETE /api/readings/{id}
 ```
 
 ### Códigos de Status HTTP
 
-| Código | Descrição |
-|--------|-----------|
-| 200 | Sucesso |
-| 201 | Criado com sucesso |
-| 204 | Deletado com sucesso |
-| 400 | Requisição inválida |
-| 404 | Recurso não encontrado |
-| 500 | Erro interno do servidor |
+| Código | Descrição                |
+| ------ | ------------------------ |
+| 200    | Sucesso                  |
+| 201    | Criado com sucesso       |
+| 204    | Deletado com sucesso     |
+| 400    | Requisição inválida      |
+| 404    | Recurso não encontrado   |
+| 500    | Erro interno do servidor |
 
 ---
 
@@ -241,18 +252,19 @@ curl http://localhost:8080/api/readings \
 
 **Tabela: `readings`**
 
-| Campo | Tipo | Descrição |
-|-------|------|-----------|
-| id | BIGSERIAL | Chave primária |
-| sensor_id | VARCHAR(50) | ID do sensor |
-| sensor_value | DOUBLE | Valor da leitura |
-| timestamp | TIMESTAMP | Data/hora da leitura |
-| created_at | TIMESTAMP | Data de criação |
-| updated_at | TIMESTAMP | Data de atualização |
+| Campo        | Tipo        | Descrição            |
+| ------------ | ----------- | -------------------- |
+| id           | BIGSERIAL   | Chave primária       |
+| sensor_id    | VARCHAR(50) | ID do sensor         |
+| sensor_value | DOUBLE      | Valor da leitura     |
+| timestamp    | TIMESTAMP   | Data/hora da leitura |
+| created_at   | TIMESTAMP   | Data de criação      |
+| updated_at   | TIMESTAMP   | Data de atualização  |
 
 ### Gerenciamento
 
 #### Via PgAdmin
+
 1. Acesse `http://localhost:5050`
 2. Login: `admin@festo.com` / `admin123`
 3. Adicione servidor:
@@ -263,6 +275,7 @@ curl http://localhost:8080/api/readings \
    - Password: `festo_pass_2024`
 
 #### Via CLI
+
 ```bash
 # Conectar ao PostgreSQL
 docker exec -it festo-postgres psql -U festo_user -d festo_sensors
@@ -279,11 +292,13 @@ SELECT * FROM readings LIMIT 10;
 ## 🧪 Testes
 
 ### Executar Testes
+
 ```bash
 mvn test
 ```
 
 ### Testar API com curl
+
 ```bash
 # Health Check
 curl http://localhost:8080/api/health
@@ -304,16 +319,16 @@ curl -X POST "http://localhost:8080/api/readings/generate?count=5"
 
 ## 📊 Sensores Disponíveis
 
-| ID | Nome | Tipo | Unidade |
-|----|------|------|---------|
-| 1 | Reed Switch | Digital | ciclos |
-| 2 | Pressão Absoluta | Analógico | bar |
-| 3 | Pressão Diferencial | Analógico | bar |
-| 4 | Acelerômetro | Analógico | g |
-| 5 | Temperatura | Analógico | °C |
-| 6 | Strain Gauge | Analógico | με |
-| 7 | Contador de Ciclos | Digital | ciclos |
-| 8 | Qualidade do Ar | Analógico | ppm |
+| ID  | Nome                | Tipo      | Unidade |
+| --- | ------------------- | --------- | ------- |
+| 1   | Reed Switch         | Digital   | ciclos  |
+| 2   | Pressão Absoluta    | Analógico | bar     |
+| 3   | Pressão Diferencial | Analógico | bar     |
+| 4   | Acelerômetro        | Analógico | g       |
+| 5   | Temperatura         | Analógico | °C      |
+| 6   | Strain Gauge        | Analógico | με      |
+| 7   | Contador de Ciclos  | Digital   | ciclos  |
+| 8   | Qualidade do Ar     | Analógico | ppm     |
 
 ### Status dos Sensores
 
@@ -359,6 +374,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=prod
 ### Customizar CORS
 
 Edite `application.properties`:
+
 ```properties
 app.cors.allowed-origins=http://localhost:3000,https://meuapp.com
 app.cors.allowed-methods=GET,POST,PUT,DELETE
@@ -369,12 +385,14 @@ app.cors.allowed-methods=GET,POST,PUT,DELETE
 ## 🐛 Troubleshooting
 
 ### Porta 8080 em Uso
+
 ```bash
 sudo lsof -i :8080
 sudo kill -9 [PID]
 ```
 
 ### Problemas com PostgreSQL
+
 ```bash
 # Verificar logs
 docker-compose logs postgres
@@ -388,11 +406,13 @@ docker-compose up -d
 ```
 
 ### Problemas com Maven
+
 ```bash
 mvn clean install -U
 ```
 
 ### Erro de Conexão com Banco
+
 - Verifique se o Docker está rodando
 - Confirme que o PostgreSQL está acessível: `docker-compose ps`
 - Teste conexão: `telnet localhost 5432`

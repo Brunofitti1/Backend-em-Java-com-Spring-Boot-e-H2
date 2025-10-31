@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -19,8 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Configuração de segurança com Microsoft Entra ID (Azure AD)
- * Suporta autenticação JWT via OAuth2 Resource Server
+ * Configuração de segurança com JWT personalizado
+ * Autenticação simplificada para desenvolvimento acadêmico
  */
 @Slf4j
 @Configuration
@@ -28,6 +29,8 @@ import java.util.List;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Value("${app.cors.allowed-origins:http://localhost:19006,http://localhost:8081}")
     private String allowedOrigins;
@@ -43,34 +46,31 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        log.info("Configurando Security Filter Chain");
+        log.info("Configurando Security Filter Chain com JWT");
 
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> 
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos
+                        // Endpoints públicos (não precisam de autenticação)
                         .requestMatchers(
                                 "/",
                                 "/api/health",
+                                "/api/auth/**",        // Login é público
                                 "/actuator/**",
                                 "/swagger-ui/**",
                                 "/api-docs/**",
-                                "/v3/api-docs/**"
-                        ).permitAll()
-                        // Endpoints protegidos - comentado temporariamente para desenvolvimento
-                        // .requestMatchers("/api/**").authenticated()
-                        // TODO: Descomentar para produção
-                        .anyRequest().permitAll()
-                );
-                // OAuth2 JWT desabilitado temporariamente para desenvolvimento sem Azure
-                // Descomente quando configurar o Azure AD
-                //.oauth2ResourceServer(oauth2 -> 
-                //        oauth2.jwt(jwt -> log.info("JWT Resource Server configurado"))
-                //);
+                                "/v3/api-docs/**")
+                        .permitAll()
+                        // Todos os outros endpoints /api/** precisam de autenticação
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll())
+                // Adiciona o filtro JWT antes do filtro de autenticação padrão
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
+        log.info("JWT Filter configurado. Endpoints /api/** protegidos (exceto /api/auth/**)");
+        
         return http.build();
     }
 
@@ -79,15 +79,15 @@ public class SecurityConfig {
         log.info("Configurando CORS com origins: {}", allowedOrigins);
 
         CorsConfiguration configuration = new CorsConfiguration();
-        
+
         // Configuração de origens
         List<String> origins = Arrays.asList(allowedOrigins.split(","));
         configuration.setAllowedOrigins(origins);
-        
+
         // Configuração de métodos
         List<String> methods = Arrays.asList(allowedMethods.split(","));
         configuration.setAllowedMethods(methods);
-        
+
         // Configuração de headers
         if ("*".equals(allowedHeaders)) {
             configuration.addAllowedHeader("*");
@@ -95,13 +95,13 @@ public class SecurityConfig {
             List<String> headers = Arrays.asList(allowedHeaders.split(","));
             configuration.setAllowedHeaders(headers);
         }
-        
+
         configuration.setAllowCredentials(allowCredentials);
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-        
+
         return source;
     }
 }

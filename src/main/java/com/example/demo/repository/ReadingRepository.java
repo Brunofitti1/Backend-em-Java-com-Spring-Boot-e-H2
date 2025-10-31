@@ -24,13 +24,12 @@ public interface ReadingRepository extends JpaRepository<Reading, Long> {
      * Busca leituras de um sensor em um período específico
      */
     @Query("SELECT r FROM Reading r WHERE r.sensorId = :sensorId " +
-           "AND r.timestamp BETWEEN :startDate AND :endDate " +
-           "ORDER BY r.timestamp DESC")
+            "AND r.timestamp BETWEEN :startDate AND :endDate " +
+            "ORDER BY r.timestamp DESC")
     List<Reading> findBySensorIdAndDateRange(
             @Param("sensorId") String sensorId,
             @Param("startDate") LocalDateTime startDate,
-            @Param("endDate") LocalDateTime endDate
-    );
+            @Param("endDate") LocalDateTime endDate);
 
     /**
      * Busca a leitura mais recente de um sensor

@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "readings", indexes = {
-    @Index(name = "idx_sensor_id", columnList = "sensor_id"),
-    @Index(name = "idx_timestamp", columnList = "timestamp")
+        @Index(name = "idx_sensor_id", columnList = "sensor_id"),
+        @Index(name = "idx_timestamp", columnList = "timestamp")
 })
 @Data
 @NoArgsConstructor

@@ -58,7 +58,7 @@ public class SensorUtils {
         if (value == null) {
             return "desconhecido";
         }
-        
+
         if (value > 80) {
             return "alerta";
         } else if (value > 60) {
@@ -75,7 +75,7 @@ public class SensorUtils {
         if (sensorId == null || sensorId.trim().isEmpty()) {
             return false;
         }
-        
+
         try {
             int id = Integer.parseInt(sensorId);
             return id >= 1 && id <= 8;

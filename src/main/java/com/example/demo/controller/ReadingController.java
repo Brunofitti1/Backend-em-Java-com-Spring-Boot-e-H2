@@ -33,10 +33,7 @@ public class ReadingController {
 
     private final ReadingService readingService;
 
-    @Operation(
-            summary = "Lista todos os sensores",
-            description = "Retorna informações consolidadas de todos os sensores com suas últimas leituras"
-    )
+    @Operation(summary = "Lista todos os sensores", description = "Retorna informações consolidadas de todos os sensores com suas últimas leituras")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sensores listados com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
@@ -48,10 +45,7 @@ public class ReadingController {
         return ResponseEntity.ok(sensors);
     }
 
-    @Operation(
-            summary = "Lista todas as leituras",
-            description = "Retorna todas as leituras de todos os sensores"
-    )
+    @Operation(summary = "Lista todas as leituras", description = "Retorna todas as leituras de todos os sensores")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Leituras listadas com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
@@ -63,10 +57,7 @@ public class ReadingController {
         return ResponseEntity.ok(readings);
     }
 
-    @Operation(
-            summary = "Busca leituras por sensor",
-            description = "Retorna todas as leituras de um sensor específico ordenadas por data"
-    )
+    @Operation(summary = "Busca leituras por sensor", description = "Retorna todas as leituras de um sensor específico ordenadas por data")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Leituras encontradas"),
             @ApiResponse(responseCode = "404", description = "Sensor não encontrado"),
@@ -74,17 +65,13 @@ public class ReadingController {
     })
     @GetMapping("/readings/{sensorId}")
     public ResponseEntity<List<ReadingResponse>> getReadingsBySensorId(
-            @Parameter(description = "ID do sensor", example = "1")
-            @PathVariable String sensorId) {
+            @Parameter(description = "ID do sensor", example = "1") @PathVariable String sensorId) {
         log.info("GET /api/readings/{} - Buscando leituras do sensor", sensorId);
         List<ReadingResponse> readings = readingService.getReadingsBySensorId(sensorId);
         return ResponseEntity.ok(readings);
     }
 
-    @Operation(
-            summary = "Busca leitura por ID",
-            description = "Retorna uma leitura específica pelo seu ID"
-    )
+    @Operation(summary = "Busca leitura por ID", description = "Retorna uma leitura específica pelo seu ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Leitura encontrada"),
             @ApiResponse(responseCode = "404", description = "Leitura não encontrada"),
@@ -92,23 +79,15 @@ public class ReadingController {
     })
     @GetMapping("/readings/id/{id}")
     public ResponseEntity<ReadingResponse> getReadingById(
-            @Parameter(description = "ID da leitura", example = "1")
-            @PathVariable Long id) {
+            @Parameter(description = "ID da leitura", example = "1") @PathVariable Long id) {
         log.info("GET /api/readings/id/{} - Buscando leitura", id);
         ReadingResponse reading = readingService.getReadingById(id);
         return ResponseEntity.ok(reading);
     }
 
-    @Operation(
-            summary = "Cria nova leitura",
-            description = "Registra uma nova leitura de sensor no sistema"
-    )
+    @Operation(summary = "Cria nova leitura", description = "Registra uma nova leitura de sensor no sistema")
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Leitura criada com sucesso",
-                    content = @Content(schema = @Schema(implementation = ReadingResponse.class))
-            ),
+            @ApiResponse(responseCode = "201", description = "Leitura criada com sucesso", content = @Content(schema = @Schema(implementation = ReadingResponse.class))),
             @ApiResponse(responseCode = "400", description = "Dados inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
@@ -120,27 +99,20 @@ public class ReadingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(reading);
     }
 
-    @Operation(
-            summary = "Gera dados de teste",
-            description = "Gera leituras aleatórias para testes (apenas desenvolvimento)"
-    )
+    @Operation(summary = "Gera dados de teste", description = "Gera leituras aleatórias para testes (apenas desenvolvimento)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados gerados com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @PostMapping("/readings/generate")
     public ResponseEntity<String> generateTestData(
-            @Parameter(description = "Quantidade de leituras a gerar", example = "10")
-            @RequestParam(defaultValue = "10") int count) {
+            @Parameter(description = "Quantidade de leituras a gerar", example = "10") @RequestParam(defaultValue = "10") int count) {
         log.info("POST /api/readings/generate - Gerando {} leituras de teste", count);
         String result = readingService.generateTestData(count);
         return ResponseEntity.ok(result);
     }
 
-    @Operation(
-            summary = "Deleta uma leitura",
-            description = "Remove uma leitura específica do sistema"
-    )
+    @Operation(summary = "Deleta uma leitura", description = "Remove uma leitura específica do sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Leitura deletada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Leitura não encontrada"),
@@ -148,17 +120,13 @@ public class ReadingController {
     })
     @DeleteMapping("/readings/{id}")
     public ResponseEntity<Void> deleteReading(
-            @Parameter(description = "ID da leitura", example = "1")
-            @PathVariable Long id) {
+            @Parameter(description = "ID da leitura", example = "1") @PathVariable Long id) {
         log.info("DELETE /api/readings/{} - Deletando leitura", id);
         readingService.deleteReading(id);
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(
-            summary = "Health Check",
-            description = "Verifica se a API está funcionando"
-    )
+    @Operation(summary = "Health Check", description = "Verifica se a API está funcionando")
     @ApiResponse(responseCode = "200", description = "API está funcionando")
     @GetMapping("/health")
     public ResponseEntity<String> healthCheck() {

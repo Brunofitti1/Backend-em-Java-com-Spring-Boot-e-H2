@@ -33,7 +33,7 @@ public class DataInitializer {
 
                 log.info("Inicializando banco de dados com dados de exemplo...");
 
-                String[] sensorIds = {"1", "2", "3", "4", "5", "6", "7", "8"};
+                String[] sensorIds = { "1", "2", "3", "4", "5", "6", "7", "8" };
                 Random random = new Random();
                 int totalReadings = 0;
 

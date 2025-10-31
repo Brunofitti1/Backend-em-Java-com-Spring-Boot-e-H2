@@ -29,7 +29,8 @@ public class OpenAPIConfig {
                 .info(new Info()
                         .title("Festo Sensors Monitoring API")
                         .version("4.0.0")
-                        .description("API REST para monitoramento de sensores industriais Festo com autenticação Microsoft Entra ID")
+                        .description(
+                                "API REST para monitoramento de sensores industriais Festo com autenticação Microsoft Entra ID")
                         .contact(new Contact()
                                 .name("Equipe Festo")
                                 .email("contato@festo.com"))
@@ -38,8 +39,7 @@ public class OpenAPIConfig {
                                 .url("https://www.apache.org/licenses/LICENSE-2.0.html")))
                 .servers(List.of(
                         new Server().url("http://localhost:8080").description("Servidor de Desenvolvimento"),
-                        new Server().url("https://api.festo.com").description("Servidor de Produção")
-                ))
+                        new Server().url("https://api.festo.com").description("Servidor de Produção")))
                 .addSecurityItem(new SecurityRequirement().addList("bearer-jwt"))
                 .components(new io.swagger.v3.oas.models.Components()
                         .addSecuritySchemes("bearer-jwt", new SecurityScheme()

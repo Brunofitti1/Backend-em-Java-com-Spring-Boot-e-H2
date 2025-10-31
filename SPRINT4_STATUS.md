@@ -5,6 +5,7 @@
 ### ✅ Concluído (Backend)
 
 #### 1. Arquitetura e Estrutura (100%)
+
 - [x] Reorganização completa em pacotes estruturados
 - [x] Camada de Entity com JPA e Lombok
 - [x] Camada de DTO (Request/Response) com validação
@@ -17,6 +18,7 @@
 - [x] Camada de Tools (SensorUtils)
 
 #### 2. Banco de Dados (100%)
+
 - [x] Docker Compose configurado (PostgreSQL + PgAdmin)
 - [x] Containers rodando e saudáveis
 - [x] Migração H2 → PostgreSQL completa
@@ -25,6 +27,7 @@
 - [x] Indexes otimizados (sensor_id, timestamp)
 
 #### 3. API REST (100%)
+
 - [x] GET /api/sensores - Lista todos sensores
 - [x] GET /api/readings - Lista todas leituras (com filtros)
 - [x] GET /api/readings/{id} - Busca leitura por ID
@@ -36,6 +39,7 @@
 - [x] CORS configurado para React Native
 
 #### 4. Documentação Backend (100%)
+
 - [x] README_SPRINT4.md completo e detalhado
 - [x] Swagger UI disponível (/swagger-ui.html)
 - [x] OpenAPI JSON disponível (/api-docs)
@@ -43,6 +47,7 @@
 - [x] .env.example para configuração
 
 #### 5. Controle de Versão (100%)
+
 - [x] 17 commits organizados (feat, refactor, config, docs, chore)
 - [x] Mensagens descritivas seguindo Conventional Commits
 - [x] Branch main atualizada
@@ -51,6 +56,7 @@
 ### 🔄 Em Progresso
 
 #### 6. Autenticação OAuth2 (50%)
+
 - [x] Dependências do Spring Security OAuth2 adicionadas
 - [x] SecurityConfig com estrutura JWT preparada
 - [x] Configurações do Azure AD em application.properties
@@ -60,6 +66,7 @@
 - [x] **Solução temporária**: OAuth2 desabilitado para desenvolvimento local
 
 **Status Atual**: Aplicação roda sem credenciais Azure. Para ativar JWT:
+
 1. Descomentar linhas em `application.properties` (OAuth2 JWT)
 2. Descomentar `.oauth2ResourceServer()` em `SecurityConfig.java`
 3. Configurar variáveis de ambiente no `.env`
@@ -67,6 +74,7 @@
 ### ⏳ Pendente (Frontend)
 
 #### 7. Reestruturação Frontend (0%)
+
 - [ ] Criar nova estrutura de pastas:
   - [ ] `src/components/` - Componentes reutilizáveis
   - [ ] `src/contexts/` - Context API (AuthContext)
@@ -79,6 +87,7 @@
 - [ ] Criar componentes reutilizáveis (Card, Button, Input, etc.)
 
 #### 8. Autenticação Frontend (0%)
+
 - [ ] Instalar MSAL React Native (@azure/msal-react-native)
 - [ ] Configurar MSAL com Client ID do Azure
 - [ ] Criar AuthContext para gerenciar token
@@ -88,6 +97,7 @@
 - [ ] Adicionar token aos headers do Axios
 
 #### 9. Dashboard Consolidado (0%)
+
 - [ ] Criar DashboardScreen unificado
 - [ ] Grid de cards com resumo de cada sensor
 - [ ] Gráficos lado a lado com Victory Charts
@@ -96,6 +106,7 @@
 - [ ] Loading states
 
 #### 10. Mecanismos de Feedback (0%)
+
 - [ ] Instalar react-native-toast-message
 - [ ] Configurar toasts para sucesso/erro
 - [ ] Adicionar loading spinners
@@ -104,6 +115,7 @@
 - [ ] Tratamento de erros da API
 
 #### 11. Documentação Final (0%)
+
 - [ ] Atualizar README principal
 - [ ] Criar PDF com arquitetura do sistema
 - [ ] Diagramas de classes e sequência
@@ -116,29 +128,34 @@
 ## 🎯 Próximos Passos Imediatos
 
 ### 1. Testar Integração Frontend-Backend
+
 - Verificar se o frontend React Native consegue se conectar
 - Testar endpoints com dados reais
-- Validar CORS para IPs do Expo (19006, 192.168.*.*, 10.*.*.*)
+- Validar CORS para IPs do Expo (19006, 192.168._._, 10._._.\*)
 
 ### 2. Iniciar Reestruturação Frontend
+
 ```bash
 cd Aplicativo-Festo-em-React-Native
 mkdir -p src/{components,contexts,hooks,types,utils,constants}
 ```
 
 ### 3. Implementar AuthContext
+
 ```typescript
 // src/contexts/AuthContext.tsx
 // Gerenciar estado de autenticação (token, user, login, logout)
 ```
 
 ### 4. Criar API Service Centralizado
+
 ```typescript
 // src/services/api.ts
 // Axios instance com interceptors para token
 ```
 
 ### 5. Desenvolver Dashboard Unificado
+
 ```typescript
 // src/screens/DashboardScreen.tsx
 // Grid com cards de sensores + gráficos
@@ -149,6 +166,7 @@ mkdir -p src/{components,contexts,hooks,types,utils,constants}
 ## 🚀 Como Rodar Agora
 
 ### Backend
+
 ```bash
 cd Backend-em-Java-com-Spring-Boot-e-H2
 
@@ -163,6 +181,7 @@ open http://localhost:8080/swagger-ui.html
 ```
 
 ### Frontend (após reestruturação)
+
 ```bash
 cd Aplicativo-Festo-em-React-Native
 
@@ -178,6 +197,7 @@ npx expo start
 ## 📦 Dependências Instaladas
 
 ### Backend
+
 - Spring Boot 3.5.0
 - Spring Security + OAuth2 Resource Server
 - PostgreSQL Driver
@@ -188,6 +208,7 @@ npx expo start
 - HikariCP (connection pool)
 
 ### Frontend (atual)
+
 - React Native
 - Expo SDK
 - React Navigation
@@ -195,6 +216,7 @@ npx expo start
 - Victory Native (gráficos)
 
 ### Frontend (pendente instalar)
+
 - @azure/msal-react-native
 - expo-secure-store
 - react-native-toast-message
