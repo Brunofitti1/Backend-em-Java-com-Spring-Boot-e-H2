@@ -5,6 +5,7 @@
 Implementamos uma **autenticação JWT super simples** onde:
 
 ✅ **Qualquer pessoa pode fazer login** usando:
+
 - Email válido (ex: `bruno@fiap.com`)
 - Qualquer senha (ex: `123`, `abc`, qualquer coisa)
 
@@ -28,6 +29,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 ```
 
 **Resposta esperada:**
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiJ9...",
@@ -59,10 +61,12 @@ curl http://localhost:8080/api/sensores \
 ## 📝 Endpoints Criados
 
 ### Público (Não Precisa Token)
+
 - `POST /api/auth/login` - Fazer login
 - `GET /api/auth/validate` - Validar token
 
 ### Protegidos (Precisa Token)
+
 - `GET /api/sensores`
 - `GET /api/readings`
 - `POST /api/readings`
@@ -74,6 +78,7 @@ curl http://localhost:8080/api/sensores \
 ## ⚠️ Problema Atual
 
 O Maven não conseguiu baixar as dependências JWT devido ao proxy:
+
 ```
 io.jsonwebtoken:jjwt-api:jar:0.11.5
 io.jsonwebtoken:jjwt-impl:jar:0.11.5
@@ -83,6 +88,7 @@ io.jsonwebtoken:jjwt-jackson:jar:0.11.5
 ### Soluções:
 
 **Opção 1: Conectar em rede sem proxy**
+
 ```bash
 mvn clean install
 mvn spring-boot:run
@@ -91,6 +97,7 @@ mvn spring-boot:run
 **Opção 2: Configurar proxy do Maven**
 
 Edite `~/.m2/settings.xml`:
+
 ```xml
 <settings>
   <proxies>
@@ -108,6 +115,7 @@ Edite `~/.m2/settings.xml`:
 **Opção 3: Baixar JARs manualmente**
 
 Download dos JARs:
+
 - https://repo1.maven.org/maven2/io/jsonwebtoken/jjwt-api/0.11.5/jjwt-api-0.11.5.jar
 - https://repo1.maven.org/maven2/io/jsonwebtoken/jjwt-impl/0.11.5/jjwt-impl-0.11.5.jar
 - https://repo1.maven.org/maven2/io/jsonwebtoken/jjwt-jackson/0.11.5/jjwt-jackson-0.11.5.jar
@@ -141,7 +149,7 @@ No `ApiService.ts` do React Native:
 ```typescript
 // Interceptor para adicionar token automaticamente
 api.interceptors.request.use(async (config) => {
-  const token = await SecureStore.getItemAsync('authToken');
+  const token = await SecureStore.getItemAsync("authToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -154,8 +162,8 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response?.status === 401) {
       // Token expirado, volta pro login
-      await SecureStore.deleteItemAsync('authToken');
-      navigation.navigate('Login');
+      await SecureStore.deleteItemAsync("authToken");
+      navigation.navigate("Login");
     }
     return Promise.reject(error);
   }

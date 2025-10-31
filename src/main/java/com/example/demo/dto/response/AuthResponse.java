@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResponse {
-    
+
     private String token;
     private String type;
     private String email;
     private String message;
-    
+
     /**
      * Cria uma resposta de autenticação bem-sucedida
      */

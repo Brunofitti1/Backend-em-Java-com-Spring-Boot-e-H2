@@ -23,36 +23,35 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    
+
     private final JwtUtil jwtUtil;
-    
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
-        
+            FilterChain filterChain) throws ServletException, IOException {
+
         // Pega o header Authorization
         String authHeader = request.getHeader("Authorization");
-        
+
         String token = null;
         String email = null;
-        
+
         // Verifica se o header existe e começa com "Bearer "
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7); // Remove "Bearer "
-            
+
             try {
                 email = jwtUtil.getEmailFromToken(token);
             } catch (Exception e) {
                 log.error("Erro ao extrair email do token: {}", e.getMessage());
             }
         }
-        
+
         // Se o token é válido e não há autenticação no contexto
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            
+
             if (jwtUtil.validateToken(token)) {
                 // Cria uma autenticação válida
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -60,16 +59,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         null,
                         new ArrayList<>() // Sem roles/authorities nesta versão simplificada
                 );
-                
+
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                
+
                 // Define a autenticação no contexto do Spring Security
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                
+
                 log.debug("Token JWT válido para: {}", email);
             }
         }
-        
+
         // Continua o filtro
         filterChain.doFilter(request, response);
     }

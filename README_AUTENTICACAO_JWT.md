@@ -20,6 +20,7 @@ Esta é uma **autenticação simplificada** para desenvolvimento acadêmico:
 **Endpoint:** `POST /api/auth/login`
 
 **Request Body:**
+
 ```json
 {
   "email": "seu.email@exemplo.com",
@@ -28,6 +29,7 @@ Esta é uma **autenticação simplificada** para desenvolvimento acadêmico:
 ```
 
 **Exemplo com cURL:**
+
 ```bash
 curl -X POST http://localhost:8080/api/auth/login \
   -H "Content-Type: application/json" \
@@ -38,6 +40,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 ```
 
 **Response (Sucesso - 200 OK):**
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJydW5vQGZpYXAuY29tIiwic3ViIjoiYnJ1bm9AZmlhcC5jb20iLCJpYXQiOjE3MzAzNzYwMDAsImV4cCI6MTczMDQ2MjQwMH0.abc123...",
@@ -48,6 +51,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 ```
 
 **Response (Erro - 400 Bad Request):**
+
 ```json
 {
   "timestamp": "2024-10-31T10:00:00.000+00:00",
@@ -65,17 +69,20 @@ curl -X POST http://localhost:8080/api/auth/login \
 Depois de fazer login, **guarde o token** e envie-o no header `Authorization` de todas as requisições para endpoints protegidos.
 
 **Formato do Header:**
+
 ```
 Authorization: Bearer SEU_TOKEN_AQUI
 ```
 
 **Exemplo - Listar Sensores (Protegido):**
+
 ```bash
 curl http://localhost:8080/api/sensores \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJydW5vQGZpYXAuY29tIiwic3ViIjoiYnJ1bm9AZmlhcC5jb20iLCJpYXQiOjE3MzAzNzYwMDAsImV4cCI6MTczMDQ2MjQwMH0.abc123..."
 ```
 
 **Exemplo - Criar Leitura (Protegido):**
+
 ```bash
 curl -X POST http://localhost:8080/api/readings \
   -H "Authorization: Bearer SEU_TOKEN" \
@@ -96,17 +103,20 @@ curl -X POST http://localhost:8080/api/readings \
 Verifica se o token ainda é válido.
 
 **Exemplo:**
+
 ```bash
 curl http://localhost:8080/api/auth/validate \
   -H "Authorization: Bearer SEU_TOKEN"
 ```
 
 **Response (Token Válido - 200 OK):**
+
 ```
 Token válido para: bruno@fiap.com
 ```
 
 **Response (Token Inválido - 401 Unauthorized):**
+
 ```
 Token inválido ou expirado
 ```
@@ -145,14 +155,14 @@ Todos os endpoints `/api/**` **exceto** `/api/auth/**` requerem autenticação:
 
 ```typescript
 // LoginScreen.tsx
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 
 const handleLogin = async (email: string, password: string) => {
   try {
-    const response = await fetch('http://SEU_IP:8080/api/auth/login', {
-      method: 'POST',
+    const response = await fetch("http://SEU_IP:8080/api/auth/login", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
     });
@@ -161,17 +171,17 @@ const handleLogin = async (email: string, password: string) => {
 
     if (response.ok) {
       // Salva o token de forma segura
-      await SecureStore.setItemAsync('authToken', data.token);
-      await SecureStore.setItemAsync('userEmail', data.email);
-      
+      await SecureStore.setItemAsync("authToken", data.token);
+      await SecureStore.setItemAsync("userEmail", data.email);
+
       // Navega para o Dashboard
-      navigation.navigate('Dashboard');
+      navigation.navigate("Dashboard");
     } else {
-      alert('Erro ao fazer login');
+      alert("Erro ao fazer login");
     }
   } catch (error) {
-    console.error('Erro:', error);
-    alert('Erro de conexão');
+    console.error("Erro:", error);
+    alert("Erro de conexão");
   }
 };
 ```
@@ -180,22 +190,22 @@ const handleLogin = async (email: string, password: string) => {
 
 ```typescript
 // ApiService.ts
-import * as SecureStore from 'expo-secure-store';
-import axios from 'axios';
+import * as SecureStore from "expo-secure-store";
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://SEU_IP:8080/api',
+  baseURL: "http://SEU_IP:8080/api",
   timeout: 10000,
 });
 
 // Interceptor para adicionar o token automaticamente
 api.interceptors.request.use(async (config) => {
-  const token = await SecureStore.getItemAsync('authToken');
-  
+  const token = await SecureStore.getItemAsync("authToken");
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  
+
   return config;
 });
 
@@ -205,8 +215,8 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response?.status === 401) {
       // Token expirado, redireciona para login
-      await SecureStore.deleteItemAsync('authToken');
-      await SecureStore.deleteItemAsync('userEmail');
+      await SecureStore.deleteItemAsync("authToken");
+      await SecureStore.deleteItemAsync("userEmail");
       // navigation.navigate('Login'); // Implementar navegação
     }
     return Promise.reject(error);
@@ -220,14 +230,14 @@ export default api;
 
 ```typescript
 // Exemplo de uso no Dashboard
-import api from '../services/ApiService';
+import api from "../services/ApiService";
 
 const fetchSensors = async () => {
   try {
-    const response = await api.get('/sensores');
+    const response = await api.get("/sensores");
     setSensors(response.data);
   } catch (error) {
-    console.error('Erro ao buscar sensores:', error);
+    console.error("Erro ao buscar sensores:", error);
   }
 };
 ```
@@ -243,6 +253,7 @@ jwt.expiration=86400000  # 24 horas em millisegundos
 ```
 
 **⚠️ IMPORTANTE:**
+
 - Em **produção**, use uma chave secreta forte e armazene em variável de ambiente
 - Exemplo: `jwt.secret=${JWT_SECRET:default-secret-key}`
 
@@ -283,6 +294,7 @@ A: Você receberá um erro 401 (Unauthorized) e precisará fazer login novamente
 
 **Q: É seguro para produção?**  
 A: **NÃO.** Esta é uma implementação simplificada para fins acadêmicos. Para produção, você deve:
+
 - Adicionar banco de dados de usuários
 - Validar senhas com bcrypt
 - Usar HTTPS
@@ -307,7 +319,7 @@ Para tornar a autenticação mais robusta:
 ## 👥 Integrantes do Projeto
 
 - **Bruno Morade** - RM XXXXX
-- *(Adicione os outros membros)*
+- _(Adicione os outros membros)_
 
 ---
 

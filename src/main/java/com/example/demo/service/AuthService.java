@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
-    
+
     private final JwtUtil jwtUtil;
-    
+
     /**
      * Realiza o login de forma simplificada
      * Qualquer email válido + qualquer senha = autenticação bem-sucedida
@@ -27,18 +27,18 @@ public class AuthService {
      */
     public AuthResponse login(LoginRequest request) {
         log.info("Tentativa de login para email: {}", request.getEmail());
-        
+
         // Validação básica: apenas verifica se email e senha não estão vazios
         // (a validação de formato já foi feita pelo @Valid no controller)
-        
+
         // Gera o token JWT com o email do usuário
         String token = jwtUtil.generateToken(request.getEmail());
-        
+
         log.info("Login bem-sucedido para: {}", request.getEmail());
-        
+
         return AuthResponse.success(token, request.getEmail());
     }
-    
+
     /**
      * Valida um token JWT
      * 
@@ -48,7 +48,7 @@ public class AuthService {
     public boolean validateToken(String token) {
         return jwtUtil.validateToken(token);
     }
-    
+
     /**
      * Extrai o email do token
      * 

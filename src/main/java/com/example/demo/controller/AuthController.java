@@ -25,60 +25,38 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Tag(name = "Autenticação", description = "Endpoints para login e geração de tokens JWT")
 public class AuthController {
-    
+
     private final AuthService authService;
-    
+
     @PostMapping("/login")
-    @Operation(
-        summary = "Realizar login",
-        description = "Autentica o usuário e retorna um token JWT. " +
-                     "Aceita qualquer email válido e qualquer senha (autenticação simplificada para desenvolvimento)."
-    )
+    @Operation(summary = "Realizar login", description = "Autentica o usuário e retorna um token JWT. " +
+            "Aceita qualquer email válido e qualquer senha (autenticação simplificada para desenvolvimento).")
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Login realizado com sucesso",
-            content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = AuthResponse.class)
-            )
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Dados de login inválidos (email mal formatado ou campos vazios)"
-        )
+            @ApiResponse(responseCode = "200", description = "Login realizado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Dados de login inválidos (email mal formatado ou campos vazios)")
     })
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         log.info("POST /api/auth/login - Email: {}", request.getEmail());
-        
+
         AuthResponse response = authService.login(request);
-        
+
         return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping("/validate")
-    @Operation(
-        summary = "Validar token JWT",
-        description = "Verifica se um token JWT é válido e retorna informações do usuário"
-    )
+    @Operation(summary = "Validar token JWT", description = "Verifica se um token JWT é válido e retorna informações do usuário")
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Token válido"
-        ),
-        @ApiResponse(
-            responseCode = "401",
-            description = "Token inválido ou expirado"
-        )
+            @ApiResponse(responseCode = "200", description = "Token válido"),
+            @ApiResponse(responseCode = "401", description = "Token inválido ou expirado")
     })
     public ResponseEntity<String> validateToken(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.replace("Bearer ", "");
-        
+
         if (authService.validateToken(token)) {
             String email = authService.getEmailFromToken(token);
             return ResponseEntity.ok("Token válido para: " + email);
         }
-        
+
         return ResponseEntity.status(401).body("Token inválido ou expirado");
     }
 }

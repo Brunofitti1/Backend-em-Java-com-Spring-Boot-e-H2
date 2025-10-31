@@ -29,7 +29,7 @@ import java.util.List;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Value("${app.cors.allowed-origins:http://localhost:19006,http://localhost:8081}")
@@ -57,7 +57,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/",
                                 "/api/health",
-                                "/api/auth/**",        // Login é público
+                                "/api/auth/**", // Login é público
                                 "/actuator/**",
                                 "/swagger-ui/**",
                                 "/api-docs/**",
@@ -70,7 +70,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         log.info("JWT Filter configurado. Endpoints /api/** protegidos (exceto /api/auth/**)");
-        
+
         return http.build();
     }
 
